@@ -17,23 +17,18 @@ export class GoogleAuth extends React.Component<{}, GoogleAuthState> {
   state = { isSignedIn: null };
 
   componentDidMount() {
-    window.gapi.load(
-      'client:auth2',
-      (): void => {
-        window.gapi.client
-          .init({
-            clientId: gapiClientId,
-            scope: 'email'
-          })
-          .then(
-            (): void => {
-              this.auth = window.gapi.auth2.getAuthInstance();
-              this.setState({ isSignedIn: this.auth.isSignedIn.get() });
-              this.auth.isSignedIn.listen(this.onAuthChange);
-            }
-          );
-      }
-    );
+    window.gapi.load('client:auth2', (): void => {
+      window.gapi.client
+        .init({
+          clientId: gapiClientId,
+          scope: 'email',
+        })
+        .then((): void => {
+          this.auth = window.gapi.auth2.getAuthInstance();
+          this.setState({ isSignedIn: this.auth.isSignedIn.get() });
+          this.auth.isSignedIn.listen(this.onAuthChange);
+        });
+    });
   }
 
   onAuthChange = (): void => {
@@ -68,7 +63,7 @@ export class GoogleAuth extends React.Component<{}, GoogleAuthState> {
     }
   }
 
-  render() {
+  render(): JSX.Element {
     return <div>{this.renderAuthButton()}</div>;
   }
 }
